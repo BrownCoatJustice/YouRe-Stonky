@@ -25,3 +25,6 @@ replay_pid*
 
 # vs code workspace
 *.code-workspace
+
+# ???
+*.DS_Store
