@@ -13,14 +13,20 @@ public class App {
     public static Scanner foo = new Scanner(System.in);
     public static Engine engine;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         vsn = version();
         System.out.println("To start the V2 Combustion Engine, type 'S' or 'start'.\n"
                 + "To learn more commands type '?' or 'help'");
+        cmds();
+        showStats();
+    }
+
+    private static void cmds() throws InterruptedException {
+        System.out.println("\n" + "Command: ");
         switch (foo.nextLine().toLowerCase()) {
             case "start":
                 engine = new Engine();
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(2);
                 break;
             case "s":
                 engine = new Engine();
@@ -28,9 +34,8 @@ public class App {
                 break;
             default:
                 System.out.println("Not a command!");
-                break;
+                cmds();
         }
-        showStats();
     }
 
     private static void showStats() throws InterruptedException {
@@ -68,17 +73,18 @@ public class App {
         System.out.println("\n\n");
         return properties.getProperty("version");
     }
+
     private static void clearConsole() {
-            try {
-                final String os = System.getProperty("os.name");
-                if (os.contains("Windows")) {
-                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                } else {
-                    System.out.print("\033[H\033[2J");
-                    System.out.flush();
-                }
-            } catch (final Exception e) {
-                //What do I do here?
+        try {
+            final String os = System.getProperty("os.name");
+            if (os.contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
             }
+        } catch (final Exception e) {
+            // What do I do here?
         }
+    }
 }
