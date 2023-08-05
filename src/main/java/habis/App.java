@@ -1,35 +1,39 @@
 package habis;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  * Hello world!
  */
 public class App {
-    static String vsn;
     public static Scanner foo = new Scanner(System.in);
     public static Engine engine;
+    public static String version;
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        vsn = version();
-        System.out.println("To start the V2 Combustion Engine, type 'S' or 'start'.\n"
+        version = version();
+        System.out.println("********** EngSim " + version + " **********");
+        System.out.println("*********************************************");
+        System.out.println("\n\nTo start the V2 Combustion Engine, type 'S' or 'start'.\n"
                 + "To learn more commands type '?' or 'help'");
         cmds();
-        showStats();
     }
 
     private static void cmds() throws InterruptedException {
         System.out.println("\n" + "Command: ");
         switch (foo.nextLine().toLowerCase()) {
             case "start":
-                engine = new Engine();
-                TimeUnit.SECONDS.sleep(2);
-                break;
             case "s":
-                engine = new Engine();
+                startEngine();
                 TimeUnit.SECONDS.sleep(3);
                 break;
             default:
@@ -38,7 +42,14 @@ public class App {
         }
     }
 
-    private static void showStats() throws InterruptedException {
+    private static void startEngine() throws InterruptedException {
+        if (engine != null) {
+            System.out.println("Engine already running!");
+            return;
+        }
+
+        engine = new Engine();
+        System.out.println("\n" + "Engine started, press 'Q' to stop engine.");
         while (true) {
             // Clear the console for a clean display
             clearConsole();
@@ -62,16 +73,35 @@ public class App {
             // Wait for a short duration before refreshing the output (e.g., every 2
             // seconds)
             TimeUnit.SECONDS.sleep(2);
+
+            if (foo.nextLine().equalsIgnoreCase("q")) {
+                stopEngine();
+                break;
+            }
         }
+
+    }
+
+    private static void stopEngine() throws InterruptedException {
+        // Stop engine.
+        engine = null;
+        System.out.println("Engine stopped. Enter 'S' to start new engine.");
+        cmds();
     }
 
     static String version() throws IOException {
-        final Properties properties = new Properties();
-        properties.load(new App().getClass().getClassLoader().getResourceAsStream(".properties"));
-        System.out.println("********** EngSim " + properties.getProperty("version") + " **********");
-        System.out.println("*********************************************");
-        System.out.println("\n\n");
-        return properties.getProperty("version");
+        String v = "";
+        try {
+            Model model = readPomFile("pom.xml");
+            if (model != null) {
+                v = model.getVersion();
+            } else {
+                System.out.println("Error: Unable to read pom.xml file.");
+            }
+        } catch (IOException | XmlPullParserException e) {
+            System.out.println("Error: 'pom.xml' may be corrupted/deleted! Perform a fresh installation. \n\n" + e.getMessage());
+        }
+        return v;
     }
 
     private static void clearConsole() {
@@ -85,6 +115,12 @@ public class App {
             }
         } catch (final Exception e) {
             // What do I do here?
+        }
+    }
+    private static Model readPomFile(String pomFilePath) throws IOException, XmlPullParserException {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+        try (FileReader fileReader = new FileReader(pomFilePath)) {
+            return reader.read(fileReader);
         }
     }
 }

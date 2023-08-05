@@ -1,7 +1,5 @@
 package habis;
 
-import java.util.concurrent.TimeUnit;
-
 public class Engine {
     // TW: Messy getters!
     // Instance variables representing engine statistics with default values
