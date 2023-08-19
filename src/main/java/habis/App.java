@@ -2,8 +2,6 @@ package habis;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -16,14 +14,14 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  */
 public class App {
     public static Scanner foo = new Scanner(System.in);
-    public static Engine engine;
+    public static SingCylEng engine;
     public static String version;
 
     public static void main(String[] args) throws InterruptedException, IOException {
         version = version();
         System.out.println("********** EngSim " + version + " **********");
         System.out.println("*********************************************");
-        System.out.println("\n\nTo start the V2 Combustion Engine, type 'S' or 'start'.\n"
+        System.out.println("\n\nTo start the Single Cylinder Internal Combustion Engine, type 'S' or 'start'.\n"
                 + "To learn more commands type '?' or 'help'");
         cmds();
     }
@@ -33,7 +31,7 @@ public class App {
         switch (foo.nextLine().toLowerCase()) {
             case "start":
             case "s":
-                startEngine();
+                //startEngine();
                 TimeUnit.SECONDS.sleep(3);
                 break;
             default:
@@ -42,7 +40,7 @@ public class App {
         }
     }
 
-    private static void startEngine() throws InterruptedException {
+    /*private static void startEngine() throws InterruptedException {
         if (engine != null) {
             System.out.println("Engine already running!");
             return;
@@ -60,8 +58,6 @@ public class App {
             System.out.println("Torque: " + engine.getTorque() + " Nm");
             System.out.println("Displacement: " + engine.getDisplacement() + " liters");
             System.out.println("Compression Ratio: " + engine.getCompressionRatio());
-            System.out.println("Bore diameter (piston cylinder): " + engine.getBore());
-            System.out.println("Fuel efficiency: " + engine.getStroke());
             System.out.println("Maximum achievable RPM: " + engine.getMaxRpm());
             System.out.println("Thermal efficiency: " + engine.getThermalEfficiency());
             System.out.println("Air/Fuel ratio: " + engine.getAirFuelRatio());
@@ -87,7 +83,7 @@ public class App {
         engine = null;
         System.out.println("Engine stopped. Enter 'S' to start new engine.");
         cmds();
-    }
+    } */
 
     static String version() throws IOException {
         String v = "";
