@@ -62,7 +62,16 @@ public class SingCylEng {
     public double getExhaustGasTemperature() {
         return exhaustGasTemperature;
     }
-    
+    private double bore;
+    public double getBore() {
+        return bore;
+    }
+
+    private double stroke;
+    public double getStroke() {
+        return stroke;
+    }
+
     // Default constructor
     public SingCylEng() {
         horsepower = 10; // Default horsepower for a small engine
@@ -77,8 +86,11 @@ public class SingCylEng {
         engineWeight = 20.0; // Default engine weight in kilograms for a small engine
         coolantTemperature = 80.0; // Default coolant temperature in Celsius
         exhaustGasTemperature = 300.0; // Default exhaust gas temperature in Celsius
+        bore = 85.0; // Default diameter of cylinder in mm
+        stroke = 80.0; // Default distance travelled by piston in 1 cycle
         System.out.println("\n" + "Engine created.");
     }
+    // Start RPM = Idle RPM × Stroke / Bore × Displacement ≈ 1882.
 
     
 }
